@@ -22,7 +22,7 @@ export default function UsersTable(props: PropsUsersTableInterface) {
     ));
 
     return (
-        <Table variant="simple" minHeight="100vw" overflowY="scroll">
+        <Table variant="simple">
             <TableCaption>User List</TableCaption>
             <Thead>
                 <Tr>
