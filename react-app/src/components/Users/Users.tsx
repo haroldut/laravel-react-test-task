@@ -2,40 +2,78 @@ import React, { useEffect, useState } from "react";
 
 import UsersTable from "../UsersTable/UsersTable";
 
-import UserInterface from "../../interfaces/UserInterface";
-
-import { Box, Flex, Image, Link, Text } from "@chakra-ui/react";
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react"
+import { Box, Button, Center, Flex, Image, Link, Text } from "@chakra-ui/react";
+import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
+import { useAppSelector, useAppDispatch } from "../../hooks";
+import { actions } from "../../slice";
 
 export default function Users() {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
-    const [items, setItems] = useState([]);
+    const dispatch = useAppDispatch();
+    const [tabIndex, setTabIndex] = React.useState(0);
 
-    const groupItems = items.reduce((acc: any, item: UserInterface) => {
-        if (!acc[item.user_type]) {
-            acc[item.user_type] = [];
-        }
+    const adminUsers = useAppSelector((state) =>
+        state.items.find((item) => item.payload.type === "admin")
+    );
 
-        acc[item.user_type].push(item);
-        console.log(acc);
-        return acc;
-    }, {})
+    const staffUsers = useAppSelector((state) =>
+        state.items.find((item) => item.payload.type === "staff")
+    );
+
+    const customerUsers = useAppSelector((state) =>
+        state.items.find((item) => item.payload.type === "customer")
+    );
 
     useEffect(() => {
-        fetch("api/users")
+        fetchUsers("admin");
+    }, []);
+
+    const fetchUsers = (type: String) => {
+        fetch("api/users?type=" + type)
             .then((res) => res.json())
             .then(
                 (result) => {
+                    dispatch(actions.addItems({ type, users: result.users }));
                     setIsLoaded(true);
-                    setItems(result.users);
                 },
                 (error) => {
                     setIsLoaded(true);
                     setError(error);
                 }
             );
-    }, []);
+    };
+
+    const handleTabsChange = (index: number) => {
+        setIsLoaded(false);
+        setTabIndex(index);
+        switch (index) {
+            case 0:
+                fetchUsers("admin");
+                break;
+            case 1:
+                fetchUsers("staff");
+                break;
+            case 2:
+                fetchUsers("customer");
+                break;
+            default:
+                break;
+        }
+    };
+
+    const goToUsers = () => {
+        window.location.replace("/users");
+    };
+
+    const clearCache = () => {
+        fetch("api/refresh-cache")
+            .then((res) => res.json())
+            .then((result) => {
+                dispatch(actions.clearItems());
+                handleTabsChange(0);
+            });
+    };
 
     return (
         <div>
@@ -57,22 +95,28 @@ export default function Users() {
                     </Text>
                 </Flex>
             </Flex>
-            <Flex minHeight="calc(100vh - 136px)">
+            <Flex height="calc(100vh - 136px)">
                 <Box w="240px" bg="gray.50">
-                    <Box w="100%" p={1} fontSize="2xl">
-                        <Link href="users">Users</Link>
+                    <Box w="100%" paddingY={1} paddingX={3} fontSize="2xl">
+                        <Button variant="link" onClick={goToUsers}>
+                            Users
+                        </Button>
                     </Box>
-                    <Box w="100%" p={1} fontSize="2xl">
-                        <Text>Clear Cache</Text>
+                    <Box w="100%" paddingY={1} paddingX={3} fontSize="2xl">
+                        <Button variant="link" onClick={clearCache}>
+                            Clear Cache
+                        </Button>
                     </Box>
                 </Box>
-                <Box width="calc(100vw - 240px)" p={3}>
+                <Box width="calc(100vw - 240px)" p={3} overflowY="scroll">
                     {error ? (
                         <Text fontSize="1xl">{error}</Text>
-                    ) : !isLoaded ? (
-                        <Text fontSize="1xl">Loading...</Text>
                     ) : (
-                        <Tabs>
+                        <Tabs
+                            index={tabIndex}
+                            onChange={handleTabsChange}
+                            overflowY="auto"
+                        >
                             <TabList>
                                 <Tab>Admin</Tab>
                                 <Tab>Staff</Tab>
@@ -81,17 +125,61 @@ export default function Users() {
 
                             <TabPanels>
                                 <TabPanel>
-                                    {groupItems['admin'] !== undefined ? <UsersTable users={groupItems['admin']} /> : <Text fontSize="1xl">There are no admin users</Text>}
+                                    {adminUsers !== undefined ? (
+                                        <UsersTable
+                                            users={adminUsers.payload.users}
+                                        />
+                                    ) : isLoaded ? (
+                                        <Text fontSize="1xl">
+                                            There are no admin users
+                                        </Text>
+                                    ) : (
+                                        <Center>
+                                            <Image
+                                                boxSize="512px"
+                                                src="/img/progress-indicator.svg"
+                                            />
+                                        </Center>
+                                    )}
                                 </TabPanel>
                                 <TabPanel>
-                                    {groupItems['staff'] !== undefined ? <UsersTable users={groupItems['staff']} /> : <Text fontSize="1xl">There are no staff users</Text>}
+                                    {staffUsers !== undefined ? (
+                                        <UsersTable
+                                            users={staffUsers.payload.users}
+                                        />
+                                    ) : isLoaded ? (
+                                        <Text fontSize="1xl">
+                                            There are no staff users
+                                        </Text>
+                                    ) : (
+                                        <Center>
+                                            <Image
+                                                boxSize="512px"
+                                                src="/img/progress-indicator.svg"
+                                            />
+                                        </Center>
+                                    )}
                                 </TabPanel>
                                 <TabPanel>
-                                    {groupItems['customer'] !== undefined ? <UsersTable users={groupItems['customer']} /> : <Text fontSize="1xl">There are no customer users</Text>}
+                                    {customerUsers !== undefined ? (
+                                        <UsersTable
+                                            users={customerUsers.payload.users}
+                                        />
+                                    ) : isLoaded ? (
+                                        <Text fontSize="1xl">
+                                            There are no customer users
+                                        </Text>
+                                    ) : (
+                                        <Center>
+                                            <Image
+                                                boxSize="512px"
+                                                src="/img/progress-indicator.svg"
+                                            />
+                                        </Center>
+                                    )}
                                 </TabPanel>
                             </TabPanels>
                         </Tabs>
-
                     )}
                 </Box>
             </Flex>
@@ -103,7 +191,10 @@ export default function Users() {
                 padding={3}
                 bg="gray.100"
             >
-                <Text>Harold Ulloa Torres</Text>
+                <Text>
+                    Harold Ulloa Torres -{" "}
+                    <Link href="http://haroldut.com">haroldut.com</Link>
+                </Text>
             </Flex>
         </div>
     );

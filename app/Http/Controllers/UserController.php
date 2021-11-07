@@ -9,16 +9,19 @@ use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
-    public function  index()
+    public function  index(Request $request)
     {
-        if(Cache::has('users'))
+        $userType = $request->type;
+        $usersCacheKey = is_null($userType) ? 'users' : 'users.'.$userType;
+
+        if(Cache::has($usersCacheKey))
         {
-            $users = Cache::get('users');
+            $users = Cache::get($usersCacheKey);
         }
         else
         {
-            $users = User::all();
-            Cache::put('users', $users, now()->addMinutes(10));
+            $users = is_null($userType) ? User::all() : User::where('user_type',$userType)->get();
+            Cache::put($usersCacheKey, $users, now()->addMinutes(10));
         }
 
         return response()->json(['users' => $users]);

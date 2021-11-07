@@ -23,8 +23,11 @@
 
 1. Clone the repo
     ```
-    sh
     git clone https://github.com/haroldut/laravel-react-test-task
+    ```
+   (If the first pull request to main has not been merged yet, then move to develop branch)
+    ```
+    git checkout develop
     ```
 2. Copy .env.example as .env (Don't rename it)
 3. Install Composer Dependencies

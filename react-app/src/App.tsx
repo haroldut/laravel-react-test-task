@@ -1,10 +1,10 @@
 import React, { ReactNode } from 'react';
-import logo from './logo.svg';
-import './App.css';
 import { ChakraProvider } from "@chakra-ui/react"
 
+import './App.css';
+
 interface AppProps {
-  children: ReactNode  
+  children: ReactNode
 }
 
 function App({children}: AppProps) {
