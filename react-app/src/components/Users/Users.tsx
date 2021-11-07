@@ -36,23 +36,25 @@ export default function Users() {
     );
 
     useEffect(() => {
-        fetch("api/users?type=" + filterValue)
-            .then((res) => res.json())
-            .then(
-                (result) => {
-                    dispatch(
-                        actions.addItems({
-                            type: filterValue,
-                            users: result.users,
-                        })
-                    );
-                    setIsLoaded(true);
-                },
-                (error) => {
-                    setIsLoaded(true);
-                    setError(error);
-                }
-            );
+        if (filterValue) {
+            fetch("api/users?type=" + filterValue)
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        dispatch(
+                            actions.addItems({
+                                type: filterValue,
+                                users: result.users,
+                            })
+                        );
+                        setIsLoaded(true);
+                    },
+                    (error) => {
+                        setIsLoaded(true);
+                        setError(error);
+                    }
+                );
+        }
     }, [dispatch, filterValue]);
 
     const handleTabsChange = (index: number) => {
@@ -81,6 +83,7 @@ export default function Users() {
         fetch("api/refresh-cache")
             .then((res) => res.json())
             .then((result) => {
+                setFilterValue("");
                 dispatch(actions.clearItems());
                 handleTabsChange(0);
             });
