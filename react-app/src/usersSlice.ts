@@ -1,13 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const slice = createSlice({
+const usersSlice = createSlice({
     name: "items",
     initialState: [],
     reducers: {
-        addItems: (state, items) => {
+        addItems: (state: any, items) => {
             const { type, users } = items.payload;
-            const existingUsers = state.find(
-                (item) => item.payload.type === type
+            const existingUsers: any = state.find(
+                (item: any) => item.payload.type === type
             );
             if (existingUsers) {
                 existingUsers.users = users;
@@ -19,4 +19,4 @@ const slice = createSlice({
     },
 });
 
-export const { actions, reducer } = slice;
+export const { actions, reducer } = usersSlice;

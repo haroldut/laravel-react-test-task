@@ -14,13 +14,14 @@ import {
 } from "@chakra-ui/react";
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import { useAppSelector, useAppDispatch } from "../../hooks";
-import { actions } from "../../slice";
+import { actions } from "../../usersSlice";
 
 export default function Users() {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const dispatch = useAppDispatch();
     const [tabIndex, setTabIndex] = React.useState(0);
+    const [filterValue, setFilterValue] = useState("admin");
 
     const adminUsers: any = useAppSelector((state) =>
         state.items.find((item: any) => item.payload.type === "admin")
@@ -35,15 +36,16 @@ export default function Users() {
     );
 
     useEffect(() => {
-        fetchUsers("admin");
-    }, []);
-
-    const fetchUsers = (type: String) => {
-        fetch("api/users?type=" + type)
+        fetch("api/users?type=" + filterValue)
             .then((res) => res.json())
             .then(
                 (result) => {
-                    dispatch(actions.addItems({ type, users: result.users }));
+                    dispatch(
+                        actions.addItems({
+                            type: filterValue,
+                            users: result.users,
+                        })
+                    );
                     setIsLoaded(true);
                 },
                 (error) => {
@@ -51,20 +53,20 @@ export default function Users() {
                     setError(error);
                 }
             );
-    };
+    }, [dispatch, filterValue]);
 
     const handleTabsChange = (index: number) => {
         setIsLoaded(false);
         setTabIndex(index);
         switch (index) {
             case 0:
-                fetchUsers("admin");
+                setFilterValue("admin");
                 break;
             case 1:
-                fetchUsers("staff");
+                setFilterValue("staff");
                 break;
             case 2:
-                fetchUsers("customer");
+                setFilterValue("customer");
                 break;
             default:
                 break;
