@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import UsersTable from "../UsersTable/UsersTable";
 
-import { Box, Button, Center, Flex, Image, Link, Text } from "@chakra-ui/react";
+import { Box, Button, Center, Flex, Image, Link, Spinner, Text } from "@chakra-ui/react";
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import { useAppSelector, useAppDispatch } from "../../hooks";
 import { actions } from "../../slice";
@@ -78,7 +78,7 @@ export default function Users() {
     return (
         <div>
             <Flex
-                as="nav"
+                as="header"
                 align="center"
                 justify="space-between"
                 wrap="wrap"
@@ -95,8 +95,8 @@ export default function Users() {
                     </Text>
                 </Flex>
             </Flex>
-            <Flex height="calc(100vh - 136px)">
-                <Box w="240px" bg="gray.50">
+            <Flex flexWrap={{base: "wrap", lg:"nowrap"}} height={{base: "auto", lg:"calc(100vh - 136px)"}}>
+                <Box w={{base:"100vw",lg: "240px"}} h={{base: "max-content", lg: "auto"}} bg="gray.50">
                     <Box w="100%" paddingY={1} paddingX={3} fontSize="2xl">
                         <Button variant="link" onClick={goToUsers}>
                             Users
@@ -108,7 +108,7 @@ export default function Users() {
                         </Button>
                     </Box>
                 </Box>
-                <Box width="calc(100vw - 240px)" p={3} overflowY="scroll">
+                <Box w={{base:"100vw",lg: "calc(100vw - 240px)"}} p={3} overflowY="scroll">
                     {error ? (
                         <Text fontSize="1xl">{error}</Text>
                     ) : (
@@ -134,11 +134,8 @@ export default function Users() {
                                             There are no admin users
                                         </Text>
                                     ) : (
-                                        <Center>
-                                            <Image
-                                                boxSize="512px"
-                                                src="/img/progress-indicator.svg"
-                                            />
+                                        <Center p={3}>
+                                            <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl"/>
                                         </Center>
                                     )}
                                 </TabPanel>
@@ -152,11 +149,8 @@ export default function Users() {
                                             There are no staff users
                                         </Text>
                                     ) : (
-                                        <Center>
-                                            <Image
-                                                boxSize="512px"
-                                                src="/img/progress-indicator.svg"
-                                            />
+                                        <Center p={3}>
+                                            <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl"/>
                                         </Center>
                                     )}
                                 </TabPanel>
@@ -170,11 +164,8 @@ export default function Users() {
                                             There are no customer users
                                         </Text>
                                     ) : (
-                                        <Center>
-                                            <Image
-                                                boxSize="512px"
-                                                src="/img/progress-indicator.svg"
-                                            />
+                                        <Center p={3}>
+                                            <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl"/>
                                         </Center>
                                     )}
                                 </TabPanel>
