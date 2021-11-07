@@ -1,20 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const slice = createSlice({
-    name: 'items',
+    name: "items",
     initialState: [],
     reducers: {
         addItems: (state, items) => {
             const { type, users } = items.payload;
-            const existingUsers = state.find(item => item.payload.type === type)
+            const existingUsers = state.find(
+                (item) => item.payload.type === type
+            );
             if (existingUsers) {
-                existingUsers.users = users
-            }
-            else {
+                existingUsers.users = users;
+            } else {
                 state.push(items);
             }
         },
-        clearItems: () => []
+        clearItems: () => [],
     },
 });
 

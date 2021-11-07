@@ -1,18 +1,14 @@
-import React, { ReactNode } from 'react';
-import { ChakraProvider } from "@chakra-ui/react"
+import React, { ReactNode } from "react";
+import { ChakraProvider } from "@chakra-ui/react";
 
-import './App.css';
+import "./App.css";
 
 interface AppProps {
-  children: ReactNode
+    children: ReactNode;
 }
 
-function App({children}: AppProps) {
-  return (
-    <ChakraProvider>
-      {children}
-    </ChakraProvider>
-  )
+function App({ children }: AppProps) {
+    return <ChakraProvider>{children}</ChakraProvider>;
 }
 
 export default App;
