@@ -25,12 +25,13 @@
     ```
     git clone https://github.com/haroldut/laravel-react-test-task
     ```
-   (If the first pull request to main has not been merged yet, then move to develop branch)
+2. Go To laravel-react-test-task folder
+    (If the first pull request to main has not been merged yet, then move to develop branch)
     ```
     git checkout develop
     ```
-2. Copy .env.example as .env (Don't rename it)
-3. Install Composer Dependencies
+3. Copy .env.example as .env (Don't rename it)
+4. Install Composer Dependencies
     ```
     docker run --rm \
     -u "$(id -u):$(id -g)" \
@@ -39,19 +40,24 @@
     laravelsail/php80-composer:latest \
     composer install --ignore-platform-reqs
     ```
-4. Run Laravel Sail
+5. Run Laravel Sail
     ```
     ./vendor/bin/sail up
     ```
-5. Go to react-app folder
-6. Install react dependencies
+6. Run Laravel Migrate with Seed
+    ```
+    ./vendor/bin/sail artisan migrate --seed
+    ```
+7. Go to react-app folder
+8. Install react dependencies
     ```
     yarn install
     ```
-7. Run React with yarn
+9. Run React with yarn
     ```
    yarn start
     ```
+10. Go To http://localhost in the browser
 
 <!-- CONTACT -->
 
