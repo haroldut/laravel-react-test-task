@@ -1,17 +1,15 @@
-import React from "react";
+import React from 'react'
 
-import PropsUserItemInterface from "../../interfaces/PropsUserItemInterface";
+import {Tr, Td} from '@chakra-ui/react'
 
-import { Tr, Td } from "@chakra-ui/react";
+import PropsUserItemInterface from '../../interfaces/PropsUserItemInterface'
 
-export default function UserItems(props: PropsUserItemInterface) {
-    const user = props.user;
-
-    return (
-        <Tr>
-            <Td>{user.name}</Td>
-            <Td>{user.email}</Td>
-            <Td>{user.user_type}</Td>
-        </Tr>
-    );
+export default function UserItems({user}: PropsUserItemInterface) {
+  return (
+    <Tr>
+      <Td>{user.name}</Td>
+      <Td>{user.email}</Td>
+      <Td>{user.user_type}</Td>
+    </Tr>
+  )
 }

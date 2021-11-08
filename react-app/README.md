@@ -14,19 +14,19 @@
 
 ## Prerequisites
 
--   node ^16.11.1
--   yarn 1.22.17
+- node ^16.11.1
+- yarn 1.22.17
 
 ## Installation
 
 1. Install react dependencies
-    ```
-    yarn install
-    ```
+   ```
+   yarn install
+   ```
 2. Run React with yarn
-    ```
-    yarn start
-    ```
+   ```
+   yarn start
+   ```
 
 <!-- CONTACT -->
 

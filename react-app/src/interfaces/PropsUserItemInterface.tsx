@@ -1,5 +1,5 @@
-import UserInterface from "./UserInterface";
+import UserInterface from './UserInterface'
 
 export default interface PropsUserItemInterface {
-    user: UserInterface;
+  user: UserInterface
 }
